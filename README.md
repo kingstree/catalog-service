@@ -1,19 +1,17 @@
 # Catalog Service
 
-This application is part of the Polar Bookshop system and provides the functionality for managing
-the books in the bookshop catalog. It's part of the project built in the
-[Cloud Native Spring in Action](https://www.manning.com/books/cloud-native-spring-in-action) book
-by [Thomas Vitale](https://www.thomasvitale.com).
+이 애플리케이션은 Polar Bookshop 시스템의 일부이며, 서점 카탈로그에서 책을 관리하는 기능을 제공합니다.
+Cloud Native Spring in Action 도서의 일부로서, 토마스 비탈레(Thomas Vitale)가 진행한 프로젝트의 일부이기도 합니다.
 
 ## Useful Commands
 
 | Gradle Command	         | Description                                   |
 |:---------------------------|:----------------------------------------------|
-| `./gradlew bootRun`        | Run the application.                          |
-| `./gradlew build`          | Build the application.                        |
-| `./gradlew test`           | Run tests.                                    |
-| `./gradlew bootJar`        | Package the application as a JAR.             |
-| `./gradlew bootBuildImage` | Package the application as a container image. |
+| `./gradlew bootRun`        | 애플리케익션 실행.                                 |
+| `./gradlew build`          | 애플리케이션을 빌드한다                             |
+| `./gradlew test`           | 테스트 환경으로 실행.                              |
+| `./gradlew bootJar`        | jar파일로 패키징                                  |
+| `./gradlew bootBuildImage` | 컨테이너 이미지로 패키징 한다.                        |
 
 After building the application, you can also run it from the Java CLI:
 
