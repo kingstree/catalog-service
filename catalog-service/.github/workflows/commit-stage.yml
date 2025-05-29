@@ -1,0 +1,37 @@
+name: Commit Stage # 워크플로 이름
+on: push #새 코드를 저장소 푸시하면 워크플로 시작
+
+jobs:
+  build: #작업 고유 식별자
+    name: Build and Test # 명칭~
+    runs-on: ubuntu-22.04 # 작업실행 머신
+    permissions: # 작업 권한
+      contents: read # 깃 저장소를 체크 아웃 할수 있는 권한
+      security-events: write #깃 허브에 보안 이벤트 제출 권한
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4 # 현재 깃 저장소를 체크아웃 한다.
+      - name: Set up JDK
+        uses: actions/setup-java@v4 # ㅏ바 런타임을 설치하고 설정한다
+        with: #사용할 버전,배포,캐시 유형 정의
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+      - name: Build, unit tests and integration tests
+        run: |
+          chmod +x gradlew
+          ./gradlew build
+      - name: Code vulnerability scanning
+        uses: anchore/scan-action@v3 # 그라프를 사용하여 취약성 스캔
+        id: scan # 단계의 식별자 할당
+        with:
+          path: "${{ github.workspace }}" # 체크아웃 저장소 패드
+          fail-build: false # 보안 취약성 발견 시 빌드 실패 여부
+          severity-cutoff: high # 오류로 간주할 최소 수준의 보안 유형 (낮음,중간,높음, 치명적)
+          acs-report-enable: true # 스캔이 완료된 이후 리포트 생성 여부
+      - name: Upload vulnerability report
+        uses: github/codeql-action/upload-sarif@v3 # 깃허브로 보안 취약성리포트 전송
+        if: success() || failure() # 이전 단계 실패후에도 리포트 전송
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }} # 이전 단계 결과 리포트 가져옴
+          run: chmod +x gradlew ./gradlew Build # 윈도우 호환성 해결하면서 그래들 래퍼 스크립트 실행가능하게 만듬 , 코드베이스를 컴파잉 하고 단위 및 통합 테스트를 실행하는 그래들 빌드 작업 수행
